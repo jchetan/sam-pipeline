@@ -15,7 +15,7 @@ phases:
   post_build:
     commands:      
       - echo Deploying the application...
-      - sam deploy --guided
+      - sam deploy
 
 artifacts:
   files:
