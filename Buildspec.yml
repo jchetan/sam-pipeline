@@ -13,12 +13,9 @@ phases:
       - sam build
   
   post_build:
-    commands:
-      - echo Build completed on `date`
-      - echo Packaging the application...
-      - sam package --s3-bucket ${ARTIFACT_BUCKET} --output-template-file packaged.yaml
+    commands:      
       - echo Deploying the application...
-      - sam deploy --template-file packaged.yaml --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
+      - sam deploy --guided
 
 artifacts:
   files:
