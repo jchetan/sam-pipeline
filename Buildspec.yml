@@ -1,0 +1,38 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - echo Installing dependencies...
+      - pip install -r requirements.txt
+  
+  pre_build:
+    commands:
+      - echo Starting prebuild, nothing here...
+  
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the application...
+      - sam build
+  
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Packaging the application...
+      - sam package --s3-bucket ${ARTIFACT_BUCKET} --output-template-file packaged.yaml
+      - echo Deploying the application...
+      - sam deploy --template-file packaged.yaml --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
+
+artifacts:
+  files:
+    - packaged.yaml
+    - template.yaml
+    - README.md
+  discard-paths: no
+
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'
